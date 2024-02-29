@@ -57,6 +57,7 @@ model destinations {
   my_favorite my_favorite[]
   my_destinations my_destination[]
   weather weather[]
+  destination_transportation destination_transportation[]
   
 }
 
@@ -165,6 +166,24 @@ model notification_read {
   is_read Boolean
   notification notification @relation(fields: [notification_id],references: [id])
   user users @relation(fields: [user_email],references: [email])
+}
+
+model destination_transportation {
+  id Int @id
+  destination_id Int
+  trasnporation_id Int
+
+  destination destinations @relation(fields: [destination_id],references: [id])
+  transportation transportation @relation(fields: [trasnporation_id],references: [id])
+}
+
+model transportation {
+  id Int @id
+  trnasportation String
+  seats Int
+  fasilty_detail String
+  price Int
+  destination_transportation destination_transportation[]
 }
 
 enum Ratings {
