@@ -13,13 +13,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model users {
-  email String @id
-  no_hp Int @unique
-  password String
-  name String
-  foto_profile String
-  alamat_id Int @unique
-  isAdmin Boolean
+  email String @db.VarChar(255) @id
+  no_hp String @db.VarChar(12) @unique
+  password String @db.VarChar(255)
+  name String @db.VarChar(255) @default("http://localhost:2008/images/foto-profile-default.jpeg")
+  foto_profile String @db.VarChar(1500)
+  isAdmin Boolean @default(false)
+  verify Boolean @default(false)
 
   alamat alamat?
   reviews destination_reviews[]
@@ -28,24 +28,24 @@ model users {
 }
 
 model alamat {
-  alamat_id Int @id
-  village String
-  subdistrick String
-  regency String
-  province String
-  country String
+  email_user String @db.VarChar(255) @id
+  village String @db.VarChar(255)
+  subdistrick String @db.VarChar(255)
+  regency String @db.VarChar(255)
+  province String @db.VarChar(255)
+  country String @db.VarChar(255)
   kode_pos Int
 
-  user users @relation(fields: [alamat_id],references: [alamat_id])
+  user users @relation(fields: [email_user],references: [email])
 }
 
 // user model
 
 model destinations {
   id Int @id
-  nama String
-  deks String
-  thumbnail String
+  nama String @db.VarChar(255)
+  deks String @db.VarChar(255)
+  thumbnail String @db.VarChar(1500)
   price Int
 
   alamat alamat_destination?
@@ -62,11 +62,11 @@ model destinations {
 model alamat_destination {
   id Int @id
   destination_id Int @unique
-  village String
-  subdistrick String
-  regency String
-  province String
-  country String
+  village String @db.VarChar(500)
+  subdistrick String @db.VarChar(500)
+  regency String @db.VarChar(500)
+  province String @db.VarChar(500)
+  country String @db.VarChar(500)
 
   destination destinations @relation(fields: [destination_id],references: [id])
 }
@@ -74,7 +74,7 @@ model alamat_destination {
 model destination_gallery {
   id Int @id
   destination_id Int
-  image String
+  image String @db.VarChar(1500)
 
   destination destinations @relation(fields: [destination_id],references: [id])
 }
@@ -90,8 +90,8 @@ model destination_feature {
 
 model feature {
   id Int @id
-  nama String
-  detail String
+  nama String @db.VarChar(1500)
+  detail String @db.VarChar(1500)
 
   destination_feature destination_feature[]
 }
@@ -100,8 +100,8 @@ model feature {
 model destination_reviews {
   id Int @id
   destination_id Int
-  comment String
-  review_by String
+  comment String @db.VarChar(1500)
+  review_by String @db.VarChar(1500)
   ratings Ratings
 
   user users @relation(fields: [review_by],references: [email])
@@ -112,7 +112,7 @@ model destination_reviews {
 model destination_reviews_image {
   id Int @id
   destination_reviews_id Int
-  image String
+  image String @db.VarChar(1500)
 
   destination_reviews destination_reviews @relation(fields: [destination_reviews_id],references: [id])
 }
@@ -134,16 +134,16 @@ model my_destination {
 model weather {
   id Int @id
   destination_id Int
-  detail String
+  detail String @db.VarChar(2500)
 
   destination destinations @relation(fields: [destination_id],references: [id])
 }
 
 model notification {
   id Int @id
-  user_email String
-  title String
-  deks String
+  user_email String @db.VarChar(255)
+  title String @db.VarChar(600)
+  deks String @db.VarChar(2500)
   categories_id Int
   
   user users? @relation(fields: [user_email],references: [email])
@@ -153,15 +153,15 @@ model notification {
 
 model notification_categories {
   id Int @id
-  nama String
+  nama String @db.VarChar(1500)
 
   notification notification[]
 }
 model notification_read {
   id Int @id
   notification_id Int
-  user_email String
-  is_read Boolean
+  user_email String @db.VarChar(255)
+  is_read Boolean @default(false)
   notification notification @relation(fields: [notification_id],references: [id])
   user users @relation(fields: [user_email],references: [email])
 }
@@ -177,9 +177,9 @@ model destination_transportation {
 
 model transportation {
   id Int @id
-  trnasportation String
+  transportation String @db.VarChar(1500)
   seats Int
-  fasilty_detail String
+  fasilty_detail String @db.VarChar(1500)
   price Int
   destination_transportation destination_transportation[]
 }
