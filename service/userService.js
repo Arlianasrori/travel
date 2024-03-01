@@ -7,6 +7,8 @@ import path from "path"
 import fs from "fs"
 import bcrypt from "bcrypt"
 import serviceUtils from "../utils/serviceUtils.js";
+import { sendOtpToUser } from "../utils/sendOtp.js"
+import { redisClient } from "../redis/redisClient.js";
 
 
 const register = async (body,alamat) => {
@@ -46,6 +48,7 @@ const register = async (body,alamat) => {
         const alamatCreate = await tx.alamat.create({
             data : alamat
         })
+        sendOtpToUser(body.email)
 
         return {user : usercreate,alamat : alamatCreate}
     })
@@ -89,7 +92,69 @@ const updateProfile = async (user,image,url) => {
     })
 
 }
+
+const verifyOtp = async (user,otp) => {
+    if(!otp){
+        throw new responseError(400,"invalid otp")
+    }
+    const userOtp = await redisClient.get(user)
+    console.log(otp,userOtp);
+    const findUser = await prismaClient.users.findUnique({
+        where : {
+            email : user
+        },
+        select : {
+            email : true,
+            verify : true
+        }
+    })
+    if(!findUser) {
+        throw new responseError(404,"user not found")
+    }else if(findUser.verify){
+        throw new responseError(400,"user sudah verify")
+    }else{
+        if(otp != userOtp){
+            console.log("hay");
+            throw new responseError(400,"otp invalid")
+        }else{
+            await prismaClient.users.update({
+                where : {
+                    email : user
+                },
+                data : {
+                    verify : true
+                }
+            })
+        }
+    }
+
+    return "succes"
+}
+const sendOtpUlang = async (user) => {
+    const findUser = await prismaClient.users.findUnique({
+        where : {
+            email : user
+        },
+        select : {
+            email : true,
+            verify : true
+        }
+    })
+
+    if(!findUser) {
+        throw new responseError(404,"user not found")
+    }
+    if(findUser.verify){
+        throw new responseError(400,"user already verified")
+    }
+
+    sendOtpToUser(user)
+    return "succes"
+
+}
 export default {
     register,
-    updateProfile
+    updateProfile,
+    verifyOtp,
+    sendOtpUlang
 }

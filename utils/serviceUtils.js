@@ -1,4 +1,4 @@
-
+import { sendOtpToUser } from "../utils/sendOtp.js"
 const checkVerify = async (body,alamat,tx) => {
     const userUpdate = await tx.users.update({
         where : {
@@ -20,6 +20,7 @@ const checkVerify = async (body,alamat,tx) => {
         },
         data : alamat
     })
+    sendOtpToUser(body.email)
     return {user : userUpdate,alamat : alamatUpdate}
 }
 
