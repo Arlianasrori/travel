@@ -18,3 +18,4 @@ app.use(fileUpload({
    },
 }))
 app.use('/user',userRouter)
+app.use(errorMiddleware)
