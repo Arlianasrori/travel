@@ -56,7 +56,7 @@ model destinations {
   my_destinations my_destination[]
   weather weather[]
   destination_transportation destination_transportation[]
-  
+ 
 }
 
 model alamat_destination {

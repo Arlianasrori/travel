@@ -175,7 +175,6 @@ const login = async (body,user) => {
 }
 
 const googleCallback = async (code) => {
-    console.log(code);
     const {tokens} = await oauth2Client.getToken(code)
     oauth2Client.setCredentials(tokens)
 
@@ -191,6 +190,9 @@ const googleCallback = async (code) => {
         }
     })
     if(!findUser){
+        return {error : true}
+    }
+    if(!findUser.verify){
         return {error : true}
     }
 

@@ -12,5 +12,5 @@ authRouter.post("/verifyOtp/:email",verifyOtp)
 authRouter.post("/sendOtpUlang/:email",sendOtpUlang)
 authRouter.post("/login",userLoginVerifyMiddleware,login)
 authRouter.get("/login/google",loginWithGoogle)
-authRouter.get("/auth/google/callback",userLoginVerifyMiddleware,loginWithGoogleCallback)
+authRouter.get("/auth/google/callback",loginWithGoogleCallback)
 
