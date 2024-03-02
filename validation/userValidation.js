@@ -1,18 +1,13 @@
-import joi from 'joi'
+import Joi from "joi"
 
-export const registerValidation = joi.object({
-    email : joi.string().email().max(255).required(),
-    no_hp : joi.string().max(12).required(),
-    password : joi.string().max(255).required(),
-    name : joi.string().max(255).required()
+const getUserValidation = Joi.string().email().max(100).required()
+
+const updateUserValidation = Joi.object ({
+    name: Joi.string().max(255).optional(),
+    no_hp: Joi.string().max(12).optional()
 })
 
-export const alamatValidation = joi.object({
-    village : joi.string().max(255).required(),
-    subdistrick : joi.string().max(255).required(),
-    regency : joi.string().max(255).required(),
-    province : joi.string().max(255).required(),
-    country : joi.string().max(255).required(),
-    kode_pos : joi.number().required()
-})
-
+export {
+    getUserValidation,
+    updateUserValidation,
+}

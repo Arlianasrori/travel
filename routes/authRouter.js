@@ -3,8 +3,8 @@ import { register, sendOtpUlang, uploadProfile, verifyOtp } from "../controller/
 
 export const authRouter = express.Router()
 
-userRouter.post('/register',register)
-userRouter.put('/foto_Profile',uploadProfile)
-userRouter.post("/verifyOtp/:email",verifyOtp)
-userRouter.post("/sendOtpUlang/:email",sendOtpUlang)
+authRouter.post('/register',register)
+authRouter.put('/foto_Profile',uploadProfile)
+authRouter.post("/verifyOtp/:email",verifyOtp)
+authRouter.post("/sendOtpUlang/:email",sendOtpUlang)
 

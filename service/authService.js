@@ -2,7 +2,7 @@ import { validate } from "../validation/validation.js";
 import { responseError } from "../error/responseError.js";
 import jwt from "jsonwebtoken"
 import { prismaClient } from "../config/db.js";
-import { alamatValidation, registerValidation } from "../validation/userValidation.js";
+import { alamatValidation, registerValidation } from "../validation/authValidation.js";
 import path from "path"
 import fs from "fs"
 import bcrypt from "bcrypt"

@@ -4,6 +4,7 @@ import cors from "cors"
 import { errorMiddleware } from "../middleware/errorMiddleware.js"
 import fileUpload from "express-fileupload"
 import { authRouter } from "../routes/authRouter.js"
+import { userRouter } from "../routes/userRouter.js"
 
 export const app = express()
 
@@ -18,4 +19,5 @@ app.use(fileUpload({
    },
 }))
 app.use('/user',authRouter)
+app.use('/user',userRouter)
 app.use(errorMiddleware)
