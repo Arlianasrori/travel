@@ -1,5 +1,5 @@
 import express from "express"
-import { register, sendOtpUlang, uploadProfile, verifyOtp } from "../controller/userController.js"
+import { register, sendOtpUlang, uploadProfile, verifyOtp } from "../controller/authController.js"
 
 export const userRouter = express.Router()
 

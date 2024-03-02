@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 import { errorMiddleware } from "../middleware/errorMiddleware.js"
 import fileUpload from "express-fileupload"
-import { userRouter } from "../routes/userRouter.js"
+import { userRouter } from "../routes/authRouter.js"
 
 export const app = express()
 
