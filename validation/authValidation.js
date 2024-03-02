@@ -15,4 +15,7 @@ export const alamatValidation = joi.object({
     country : joi.string().max(255).required(),
     kode_pos : joi.number().required()
 })
-
+export const loginValidation = joi.object({
+    email : joi.string().email().max(255).required(),
+    password : joi.string().max(255).required()
+})

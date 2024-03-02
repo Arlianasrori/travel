@@ -2,13 +2,15 @@ import { validate } from "../validation/validation.js";
 import { responseError } from "../error/responseError.js";
 import jwt from "jsonwebtoken"
 import { prismaClient } from "../config/db.js";
-import { alamatValidation, registerValidation } from "../validation/userValidation.js";
+import { alamatValidation, loginValidation, registerValidation } from "../validation/authValidation.js";
 import path from "path"
 import fs from "fs"
 import bcrypt from "bcrypt"
 import serviceUtils from "../utils/serviceUtils.js";
 import { sendOtpToUser } from "../utils/sendOtp.js"
 import { redisClient } from "../redis/redisClient.js";
+import { oauth2Client } from "../config/googleOauth.js";
+import { google } from "googleapis";
 
 
 const register = async (body,alamat) => {
@@ -101,7 +103,7 @@ const verifyOtp = async (user,otp) => {
         throw new responseError(400,"invalid otp")
     }
     const userOtp = await redisClient.get(user)
-    console.log(otp,userOtp);
+ 
     const findUser = await prismaClient.users.findUnique({
         where : {
             email : user
@@ -155,9 +157,58 @@ const sendOtpUlang = async (user) => {
     return "succes"
 
 }
+const login = async (body,user) => {
+    body = await validate(loginValidation,body)
+
+    const isPassowrd = await bcrypt.compare(body.password,user.password)
+    if(!isPassowrd) {
+        throw new responseError(400,"email or password wrong")
+    }
+
+    const payload = {
+        email : findUser.email,
+        name : findUser.email
+    }
+    const acces_token = jwt.sign(payload,process.env.TOKEN_SECRET,{expiresIn : "2d"})
+    const refresh_token = jwt.sign(payload,process.env.REFRESH_TOKEN_SECRET,{expiresIn : "60d"})
+
+    return {acces_token,refresh_token}
+}
+
+const googleCallback = async (code) => {
+    console.log(code);
+    const {tokens} = await oauth2Client.getToken(code)
+    oauth2Client.setCredentials(tokens)
+
+    const oauth2 = google.oauth2({
+        auth: oauth2Client,
+        version : "v2"
+    })
+
+    const {data} = await oauth2.userinfo.get()
+    const findUser = await prismaClient.users.findUnique({
+        where : {
+            email : data.email
+        }
+    })
+    if(!findUser){
+        return {error : true}
+    }
+
+    const payload = {
+        email : findUser.email,
+        name : findUser.email
+    }
+    const acces_token = jwt.sign(payload,process.env.TOKEN_SECRET,{expiresIn : "2d"})
+    const refresh_token = jwt.sign(payload,process.env.REFRESH_TOKEN_SECRET,{expiresIn : "60d"})
+
+    return {error : false,acces_token,refresh_token}
+}
 export default {
     register,
     updateProfile,
     verifyOtp,
-    sendOtpUlang
+    sendOtpUlang,
+    login,
+    googleCallback
 }
