@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 import { errorMiddleware } from "../middleware/errorMiddleware.js"
 import fileUpload from "express-fileupload"
-import { userRouter } from "../routes/authRouter.js"
+import { authRouter } from "../routes/authRouter.js"
 
 export const app = express()
 
@@ -17,5 +17,5 @@ app.use(fileUpload({
     fileSize: 50 * 1024 * 1024, 
    },
 }))
-app.use('/user',userRouter)
+app.use('/user',authRouter)
 app.use(errorMiddleware)

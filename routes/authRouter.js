@@ -1,7 +1,7 @@
 import express from "express"
 import { register, sendOtpUlang, uploadProfile, verifyOtp } from "../controller/authController.js"
 
-export const userRouter = express.Router()
+export const authRouter = express.Router()
 
 userRouter.post('/register',register)
 userRouter.put('/foto_Profile',uploadProfile)
