@@ -1,0 +1,177 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model users {
+  email String @id
+  no_hp Int @unique
+  password String
+  name String
+  foto_profile String
+  alamat_id Int @unique
+  isAdmin Boolean
+
+  alamat alamat?
+  reviews destination_reviews[]
+  notification notification[]
+  notification_read notification_read[]
+}
+
+model alamat {
+  alamat_id Int @id
+  village String
+  subdistrick String
+  regency String
+  province String
+  country String
+  kode_pos Int
+
+  user users @relation(fields: [alamat_id],references: [alamat_id])
+}
+
+// user model
+
+model destinations {
+  id Int @id
+  nama String
+  deks String
+  thumbnail String
+  price Int
+
+  alamat alamat_destination?
+  gallery destination_gallery[]
+  feature destination_feature[]
+  review destination_reviews[]
+  my_favorite my_favorite[]
+  my_destinations my_destination[]
+  weather weather[]
+  
+}
+
+model alamat_destination {
+  id Int @id
+  destination_id Int @unique
+  village String
+  subdistrick String
+  regency String
+  province String
+  country String
+
+  destination destinations @relation(fields: [destination_id],references: [id])
+}
+
+model destination_gallery {
+  id Int @id
+  destination_id Int
+  image String
+
+  destination destinations @relation(fields: [destination_id],references: [id])
+}
+
+model destination_feature {
+  id Int @id
+  destination_id Int
+  feature_id Int
+
+  destination destinations @relation(fields: [destination_id],references: [id])
+  feature feature @relation(fields: [feature_id],references: [id])
+}
+
+model feature {
+  id Int @id
+  nama String
+  detail String
+
+  destination_feature destination_feature[]
+}
+
+
+model destination_reviews {
+  id Int @id
+  destination_id Int
+  comment String
+  review_by String
+  ratings Ratings
+
+  user users @relation(fields: [review_by],references: [email])
+  destination destinations @relation(fields: [destination_id],references: [id])
+  image destination_reviews_image[]
+}
+
+model destination_reviews_image {
+  id Int @id
+  destination_reviews_id Int
+  image String
+
+  destination_reviews destination_reviews @relation(fields: [destination_reviews_id],references: [id])
+}
+
+model my_favorite {
+  id Int @id
+  destination_id Int
+
+  destination destinations @relation(fields: [destination_id],references: [id])
+}
+
+model my_destination {
+  id Int @id
+  destination_id Int
+
+  destination destinations @relation(fields: [destination_id],references: [id])
+}
+
+model weather {
+  id Int @id
+  destination_id Int
+  detail String
+
+  destination destinations @relation(fields: [destination_id],references: [id])
+}
+
+model notification {
+  id Int @id
+  user_email String
+  title String
+  deks String
+  categories_id Int
+  
+  user users? @relation(fields: [user_email],references: [email])
+  categories notification_categories @relation(fields: [categories_id],references: [id])
+  read notification_read[]
+}
+
+model notification_categories {
+  id Int @id
+  nama String
+
+  notification notification[]
+}
+model notification_read {
+  id Int @id
+  notification_id Int
+  user_email String
+  is_read Boolean
+  notification notification @relation(fields: [notification_id],references: [id])
+  user users @relation(fields: [user_email],references: [email])
+}
+
+enum Ratings {
+ sangat_buruk
+ buruk
+ cukup_baik
+ baik
+ sangat_baik
+}
+//  destination model
