@@ -16,8 +16,8 @@ model users {
   email String @db.VarChar(255) @id
   no_hp String @db.VarChar(12) @unique
   password String @db.VarChar(255)
-  name String @db.VarChar(255) @default("http://localhost:2008/images/foto-profile-default.jpeg")
-  foto_profile String @db.VarChar(1500)
+  name String @db.VarChar(255) 
+  foto_profile String @db.VarChar(1500) @default("http://localhost:2008/images/foto-profile-default.jpeg")
   isAdmin Boolean @default(false)
   verify Boolean @default(false)
 
