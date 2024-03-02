@@ -76,7 +76,7 @@ const updateProfile = async (user,image,url) => {
         if(err) {
             throw new responseError(500,err.message)
         }
-        return prismaClient.users.update({
+        const updateProfile = await prismaClient.users.update({
             where : {
                 email : findUser.email
             },
@@ -89,6 +89,9 @@ const updateProfile = async (user,image,url) => {
                 foto_profile : true,                      
             }
         })
+        const nameBeforeUpdate = findUser.foto_profile.split("/")[4]
+        await fs.unlink(`./public/images/${nameBeforeUpdate}`)
+        return updateProfile
     })
 
 }
