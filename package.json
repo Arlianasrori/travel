@@ -23,8 +23,10 @@
     "joi": "^17.12.2",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.11",
-    "prisma": "^5.10.2",
     "randomstring": "^1.3.0",
     "redis": "^4.6.13"
+  },
+  "devDependencies": {
+    "prisma": "^5.10.2"
   }
 }

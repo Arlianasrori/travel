@@ -25,6 +25,7 @@ model users {
   reviews destination_reviews[]
   notification notification[]
   notification_read notification_read[]
+  destination destinations[]
 }
 
 model alamat {
@@ -47,6 +48,7 @@ model destinations {
   deks String @db.VarChar(255)
   thumbnail String @db.VarChar(1500)
   price Int
+  add_by String @db.VarChar(255)
 
   alamat alamat_destination?
   gallery destination_gallery[]
@@ -56,6 +58,8 @@ model destinations {
   my_destinations my_destination[]
   weather weather[]
   destination_transportation destination_transportation[]
+
+  user users @relation(fields: [add_by],references: [email])
  
 }
 
