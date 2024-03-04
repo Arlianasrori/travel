@@ -2,7 +2,7 @@ import userService from "../service/userService.js";
 
 const getUser = async (req, res, next) => {
   try {
-    const email = req.body.email;
+    const email = req.params.email;
     const result = await userService.getUser(email);
     res.status(200).json({
       data: result,
@@ -14,9 +14,10 @@ const getUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    const email = req.body;
+    const data = req.body;
+    data.email = req.user.email
 
-    const result = await userService.updateUser(email);
+    const result = await userService.updateUser(data);
     res.status(200).json({
       data: result,
     });
