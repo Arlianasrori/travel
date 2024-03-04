@@ -30,7 +30,7 @@ const getUser = async (email) => {
 };
 
 const updateUser = async (req) => {
-  const user = validate(updateUserValidation, req);
+  const user = await validate(updateUserValidation, req);
 
   const totalUserInDatabase = await prismaClient.users.findUnique({
     where: {
@@ -38,36 +38,51 @@ const updateUser = async (req) => {
     },
   });
 
-  if(!totalUserInDatabase ) {
-    throw new responseError(404, "User is not found")
+  if (!totalUserInDatabase) {
+    throw new responseError(404, "User is not found");
   }
 
-  const data = {}
+  const data = {};
 
-  if(user.name) {
-    data.name = user.name
+  if (user.name) {
+    data.name = user.name;
   }
 
   if (user.no_hp) {
-    data.no_hp = user.no_hp
+    data.no_hp = user.no_hp;
   }
 
-  prismaClient.users.update ({
+  return prismaClient.users.update({
     where: {
-        email: user.email
+      email: user.email,
     },
     data: data,
     select: {
-        email: true,
-        name: true,
-        no_hp: true,
-        verify: true,
-        isAdmin: true,
-        foto_profile: true,
-      },
-  })
+      email: true,
+      name: true,
+      no_hp: true,
+      verify: true,
+      isAdmin: true,
+      foto_profile: true,
+    },
+  });
+};
+
+const getAllUser = () => {
+  return prismaClient.users.findMany({
+    select: {
+      email: true,
+      name: true,
+      no_hp: true,
+      verify: true,
+      isAdmin: true,
+      foto_profile: true,
+    },
+  });
 };
 
 export default {
   getUser,
+  updateUser,
+  getAllUser,
 };
