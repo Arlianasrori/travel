@@ -18,6 +18,7 @@ export const userLoginVerifyMiddleware = async (req,res,next) => {
             msg : "user belum verify"
         })
     }
-    req.user = findUser
+    
+    req.user = {email : findUser.email,no_hp: findUser.no_hp,password: findUser.password,name : findUser.name}
     next()
 }

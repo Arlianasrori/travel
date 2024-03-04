@@ -91,8 +91,13 @@ const updateProfile = async (user,image,url) => {
                 foto_profile : true,                      
             }
         })
-        const nameBeforeUpdate = findUser.foto_profile.split("/")[4]
-        await fs.unlink(`./public/images/${nameBeforeUpdate}`)
+        const nameBeforeUpdate = findUser.foto_profile.split("/")[5]
+        fs.unlink(`./public/images/${nameBeforeUpdate}`,(err) => {
+            if(err) {
+                console.log(err);
+                return err
+            }
+        })
         return updateProfile
     })
 
@@ -158,6 +163,7 @@ const sendOtpUlang = async (user) => {
 }
 const login = async (body,user) => {
     body = await validate(loginValidation,body)
+    console.log(user);
 
     const isPassowrd = await bcrypt.compare(body.password,user.password)
     if(!isPassowrd) {
@@ -165,8 +171,8 @@ const login = async (body,user) => {
     }
 
     const payload = {
-        email : findUser.email,
-        name : findUser.email
+        email : user.email,
+        name : user.email
     }
     const acces_token = jwt.sign(payload,process.env.TOKEN_SECRET,{expiresIn : "2d"})
     const refresh_token = jwt.sign(payload,process.env.REFRESH_TOKEN_SECRET,{expiresIn : "60d"})
