@@ -11,6 +11,7 @@ import { sendOtpToUser } from "../utils/sendOtp.js"
 import { redisClient } from "../redis/redisClient.js";
 import { oauth2Client } from "../config/googleOauth.js";
 import { google } from "googleapis";
+import { file } from "../utils/imageSaveUtils.js";
 
 
 const register = async (body,alamat) => {
@@ -33,7 +34,7 @@ const register = async (body,alamat) => {
         throw new responseError(400,"user sudah terdaftar")
        }
     }
-
+  
     return prismaClient.$transaction(async (tx) => {
         const usercreate = await tx.users.create({
             data : body,
@@ -65,15 +66,8 @@ const updateProfile = async (user,image,url) => {
         throw new responseError(404,"user not found")
     }
 
-    const fileName = image.name
-    const extFileRequired = [".jpg",".png",".jpeg"]
-    const extFile = path.extname(fileName)
-    if(!extFileRequired.includes(extFile)) {
-        throw new responseError(400,`extensi file ${extFile} tidak didukung`)
-    }
-    const fullName = `${new Date().getTime()}-${fileName}`
-    const fullPath = `${url}/${fullName}`
-    const pathSaveFile = `./public/images/${fullName}`
+    const {pathSaveFile,fullPath} = await file(image,url)
+
     return image.mv(pathSaveFile,async (err) => {
         if(err) {
             throw new responseError(500,err.message)

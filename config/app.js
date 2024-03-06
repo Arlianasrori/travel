@@ -6,6 +6,7 @@ import fileUpload from "express-fileupload"
 import { authRouter } from "../routes/authRouter.js"
 import env from "dotenv"
 import { userRouter } from "../routes/userRouter.js"
+import { destinationRouter } from "../routes/destinationRouter.js"
 
 
 export const app = express()
@@ -23,4 +24,5 @@ app.use(fileUpload({
 }))
 app.use('/user',authRouter)
 app.use('/user',userRouter)
+app.use('/destination',destinationRouter)
 app.use(errorMiddleware)

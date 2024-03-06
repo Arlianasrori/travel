@@ -45,7 +45,7 @@ model alamat {
 model destinations {
   id Int @id
   nama String @db.VarChar(255)
-  deks String @db.VarChar(255)
+  deks String @db.VarChar(1500)
   thumbnail String @db.VarChar(1500)
   price Int
   add_by String @db.VarChar(255)
@@ -64,13 +64,15 @@ model destinations {
 }
 
 model alamat_destination {
-  id Int @id
-  destination_id Int @unique
+  destination_id Int @id
   village String @db.VarChar(500)
   subdistrick String @db.VarChar(500)
   regency String @db.VarChar(500)
   province String @db.VarChar(500)
   country String @db.VarChar(500)
+  detail_format String @db.VarChar(500)
+  latitude Int 
+  longtitude Int
 
   destination destinations @relation(fields: [destination_id],references: [id])
 }
@@ -122,7 +124,7 @@ model destination_reviews_image {
 }
 
 model my_favorite {
-  id Int @id
+  id Int @id 
   destination_id Int
 
   destination destinations @relation(fields: [destination_id],references: [id])
@@ -134,6 +136,8 @@ model my_destination {
 
   destination destinations @relation(fields: [destination_id],references: [id])
 }
+
+// add delete
 
 model weather {
   id Int @id
