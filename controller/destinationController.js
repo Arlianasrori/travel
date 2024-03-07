@@ -23,6 +23,48 @@ export const add = async (req,res,next) => {
         console.log("p");
 
         const result = await destinationService.add(body,alamat,image,url)
+        res.status(201).json({
+            msg : "succes",
+            data : result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const deleteDestination = async (req,res,next) => {
+    try {
+        const id = req.params.id
+        const result = await destinationService.deleteDestination(id)
+        res.status(200).json({
+            msg : "succes",
+            data : result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+export const updateDestination = async (req,res,next) => {
+    try {
+        const id = req.params.id
+        const body = req.body
+        body.id = id
+        const result = await destinationService.update(body)
+        res.status(200).json({
+            msg : "succes",
+            data : result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+export const updateThumbnail = async (req,res,next) => {
+    try {
+        const id = req.params.id
+        const image = req.files.thumbnail
+        const url = `http://${req.hostname}/public/images`
+
+        const result = await destinationService.updateThumbnail(id,image,url)
         res.status(200).json({
             msg : "succes",
             data : result

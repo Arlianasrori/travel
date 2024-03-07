@@ -21,3 +21,11 @@ export const addDestinationAlamatValidation = joi.object({
     longtitude : joi.number().required() 
 })
 
+export const deleteDestinationValidation = joi.string().required()
+
+export const updateDestinationValidation = joi.object({
+    id : joi.number().required(),
+    nama :  joi.string().max(255).optional(),
+    deks : joi.string().max(1500).optional(),
+    price : joi.number().optional()
+})

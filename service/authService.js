@@ -3,7 +3,6 @@ import { responseError } from "../error/responseError.js";
 import jwt from "jsonwebtoken"
 import { prismaClient } from "../config/db.js";
 import { alamatValidation, loginValidation, registerValidation } from "../validation/authValidation.js";
-import path from "path"
 import fs from "fs"
 import bcrypt from "bcrypt"
 import serviceUtils from "../utils/serviceUtils.js";
@@ -89,7 +88,7 @@ const updateProfile = async (user,image,url) => {
         fs.unlink(`./public/images/${nameBeforeUpdate}`,(err) => {
             if(err) {
                 console.log(err);
-                return err
+                throw new responseError(500,err.message)
             }
         })
         return updateProfile
