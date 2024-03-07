@@ -29,3 +29,15 @@ export const updateDestinationValidation = joi.object({
     deks : joi.string().max(1500).optional(),
     price : joi.number().optional()
 })
+export const addFeatureCategoriesDestinationValidation = joi.object({
+    nama :  joi.string().max(255).required(),
+    detail : joi.string().max(1500).required(),
+})
+export const addFeatureDestinationValidation = joi.object({
+    destination_id : joi.number().max(255).required(),
+    feature_id : joi.number().max(255).required(),
+})
+export const addDestinationGalerryValidation = joi.object({
+  destination_id : joi.number().required(),
+  image : joi.string().max(1500).required(),
+})

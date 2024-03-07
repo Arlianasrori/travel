@@ -73,3 +73,20 @@ export const updateThumbnail = async (req,res,next) => {
         next(error)
     }
 }
+
+export const addFeaturecategories = async (req,res,next) => {
+    const body = req.body
+    const result = await destinationService.addFeatureCategories(body)
+    res.status(200).json({
+        msg : "succes",
+        data : result
+    })
+}
+export const addFeature = async (req,res,next) => {
+    const body = req.body
+    const result = await destinationService.addFeature(body)
+    res.status(200).json({
+        msg : "succes",
+        data : result
+    })
+}

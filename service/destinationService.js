@@ -1,6 +1,6 @@
 import { prismaClient } from "../config/db.js";
 import { responseError } from "../error/responseError.js";
-import { addDestinationAlamatValidation, addDestinationValidation, deleteDestinationValidation, updateDestinationValidation } from "../validation/destinationValidation.js";
+import { addDestinationAlamatValidation, addDestinationGalerryValidation, addDestinationValidation, addFeatureCategoriesDestinationValidation, addFeatureDestinationValidation, deleteDestinationValidation, updateDestinationValidation } from "../validation/destinationValidation.js";
 import { validate } from "../validation/validation.js";
 import Randomstring from "randomstring";
 import { file } from "../utils/imageSaveUtils.js";
@@ -128,10 +128,73 @@ const updateThumbnail = async (id,image,url) => {
         return updateDestination
 })}
 
+const addFeatureCategories = async (body) => {
+    body = await validate(addFeatureCategoriesDestinationValidation,body)
+    const findCategories = await prismaClient.feature.count({
+        where : {
+            nama : body.nama
+        }
+    })
+    if(findCategories) {
+        throw new responseError(400,"categories telah tambahkan")
+    }
+    return prismaClient.feature.create({
+        data : body
+    })
+}
 
+const addFeature = async (body) => {
+    body = await validate(addFeatureDestinationValidation,body)
+
+    const findDestination = await prismaClient.destinations.findUnique({
+        where : {
+            id : body.destination_id
+        }
+    })
+
+    if(!findDestination) {
+        throw new responseError(404,"destination not found")
+    }
+
+    const findFeature = await prismaClient.feature.findUnique({
+        where : {
+            id : body.feature_id
+        }
+    })
+
+    if(!findFeature) {
+        throw new responseError(404,"feature not found")
+    }
+    return prismaClient.destination_feature.create({
+        data : body
+    })    
+}
+const addGalerry = async (body,id) => {
+    const findDestination = await prismaClient.destinations.findUnique({
+        where : {
+            id : id
+        }
+    })
+
+    if(!findDestination) {
+        throw new responseError(404,"destination is not found")
+    }
+    const datas = []
+    for(let i = 0;i <= body.length;i++) {
+        body[i].destination_id = id
+        const data = await validate(addDestinationGalerryValidation,body[i])
+        datas.push(data)
+    }
+
+    return prismaClient.destination_gallery.createMany({
+        data : datas
+    })
+}
 export default {
     add,
     deleteDestination,
     update,
-    updateThumbnail
+    updateThumbnail,
+    addFeatureCategories,
+    addFeature
 }

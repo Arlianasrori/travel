@@ -78,7 +78,7 @@ model alamat_destination {
 }
 
 model destination_gallery {
-  id Int @id
+  id Int @id @default(autoincrement())
   destination_id Int
   image String @db.VarChar(1500)
 
@@ -86,7 +86,7 @@ model destination_gallery {
 }
 
 model destination_feature {
-  id Int @id
+  id Int @id @default(autoincrement())
   destination_id Int
   feature_id Int
 
@@ -95,8 +95,8 @@ model destination_feature {
 }
 
 model feature {
-  id Int @id
-  nama String @db.VarChar(1500)
+  id Int @id @default(autoincrement())
+  nama String @db.VarChar(1500) @unique
   detail String @db.VarChar(1500)
 
   destination_feature destination_feature[]
