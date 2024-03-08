@@ -13,6 +13,7 @@ export const adminDestinationMiddleware = async (req,res,next) => {
             }
         }
         req.user = user
+        console.log(user);
         return user
     })
 

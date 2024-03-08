@@ -21,7 +21,7 @@ export const uploadProfile = async (req,res,next) => {
     try {
         const user = req.body.email
         const file = req.files.foto_profile
-        const url = `http://${req.hostname}/public/images`
+        const url = `http://${req.hostname}:2008/public/images`
 
         const result = await userService.updateProfile(user,file,url)
         res.status(201).json({

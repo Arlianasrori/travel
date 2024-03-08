@@ -2,6 +2,7 @@ import { responseError } from "../error/responseError.js"
 import path from "path"
 export const file = async (image,url) => {
     const fileName = image.name
+    console.log(fileName);
     const extFileRequired = [".jpg",".png",".jpeg"]
     const extFile = path.extname(fileName)
     if(!extFileRequired.includes(extFile)) {

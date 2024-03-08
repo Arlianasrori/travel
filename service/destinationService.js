@@ -1,9 +1,10 @@
 import { prismaClient } from "../config/db.js";
 import { responseError } from "../error/responseError.js";
-import { addDestinationAlamatValidation, addDestinationGalerryValidation, addDestinationValidation, addFeatureCategoriesDestinationValidation, addFeatureDestinationValidation, deleteDestinationValidation, updateDestinationValidation } from "../validation/destinationValidation.js";
+import { addDestinationAlamatValidation, addDestinationGalleryValidation, addDestinationValidation, addFeatureCategoriesDestinationValidation, addFeatureDestinationValidation, deleteDestinationValidation, updateDestinationValidation } from "../validation/destinationValidation.js";
 import { validate } from "../validation/validation.js";
 import Randomstring from "randomstring";
 import { file } from "../utils/imageSaveUtils.js";
+import fs from "fs"
 
 const add = async (body,alamat,image,url) => {
     const {pathSaveFile,fullPath} = await file(image,url)
@@ -51,16 +52,15 @@ const deleteDestination = async (id) => {
         throw new responseError(404,"destination is not found")
     }
     
-    const deleteTransaction = await prismaClient.$transaction(async (tx) => {    
-        const destinationDelete = await tx.destinations.delete({
-            where : {
-                id : id
-            }
-        })
-        
+    const deleteTransaction = await prismaClient.$transaction(async (tx) => {           
         const alamatDestinationDelete = await tx.alamat_destination.delete({
             where : {
                 destination_id : id
+            }
+        })
+        const destinationDelete = await tx.destinations.delete({
+            where : {
+                id : id
             }
         })
         return{destination : destinationDelete,alamat:alamatDestinationDelete}
@@ -98,7 +98,7 @@ const update = async (body) => {
 const updateThumbnail = async (id,image,url) => {
     const findDestination = await prismaClient.destinations.findUnique({
         where : {
-            email : id
+            id : id
         }
     })
     if(!findDestination) {
@@ -106,11 +106,11 @@ const updateThumbnail = async (id,image,url) => {
     }
 
     const {pathSaveFile,fullPath} = await file(image,url)
-
-    return image.mv(pathSaveFile,async (err) => {
-        if(err) {
-            throw new responseError(500,err.message)
-        }
+        await image.mv(pathSaveFile,async (err) => {
+            if(err) {
+                throw new responseError(500,err.message)
+            }
+        })
         const updateDestination = await prismaClient.destinations.update({
             where : {
                 id : id
@@ -119,14 +119,15 @@ const updateThumbnail = async (id,image,url) => {
                 thumbnail : fullPath
             }
         })
+   
         const nameBeforeUpdate = findDestination.thumbnail.split("/")[5]
         fs.unlink(`./public/images/${nameBeforeUpdate}`,(err) => {
             if(err) {
                 throw new responseError(500,err.message)
             }
-        })
+        })    
         return updateDestination
-})}
+}
 
 const addFeatureCategories = async (body) => {
     body = await validate(addFeatureCategoriesDestinationValidation,body)
@@ -169,7 +170,58 @@ const addFeature = async (body) => {
         data : body
     })    
 }
-const addGalerry = async (body,id) => {
+const deleteFeature = async (id) => {
+    const findFeature = await prismaClient.destination_feature.findUnique({
+        where : {
+            id : id
+        }
+    })
+    if(!findFeature) {
+        throw new responseError(404,"feature is not found")
+    }
+    return prismaClient.destination_feature.delete({
+        where : {
+            id : id
+        }
+    })
+}
+const updateFeature = async (id,body) => {
+    const findFeature = await prismaClient.destination_feature.findUnique({
+        where : {
+            id : id
+        }
+    })
+    if(!findFeature) {
+        throw new responseError(404,"feature is not found")
+    }
+    return prismaClient.destination_feature.update({
+        where : {
+            id : id
+        },
+        data : {
+            feature_id : body
+        }
+    })
+}
+const updateFeatureCategories = async (id,body) => {
+    body = await validate(addFeatureCategoriesDestinationValidation,body)
+    const findFeatureCategories = await prismaClient.feature.findUnique({
+        where : {
+            id : id
+        }
+    })
+    if(!findFeatureCategories) {
+        throw new responseError(404,"feature Categories is not found")
+    }
+    return prismaClient.destination_feature.update({
+        where : {
+            id : id
+        },
+        data : body
+    })
+}
+const addGallery = async (body,id,url) => {
+    console.log(body.length);
     const findDestination = await prismaClient.destinations.findUnique({
         where : {
             id : id
@@ -180,12 +232,27 @@ const addGalerry = async (body,id) => {
         throw new responseError(404,"destination is not found")
     }
     const datas = []
-    for(let i = 0;i <= body.length;i++) {
-        body[i].destination_id = id
-        const data = await validate(addDestinationGalerryValidation,body[i])
+    for(let i = 0;i <= body.length - 1;i++) {
+        const {pathSaveFile,fullPath} = await file(body[i],url)
+        let dataBase64 = body[i].data.replace(/^data:image\/\w+;base64,/, "")
+        let buffer = Buffer.from(dataBase64, 'base64');
+        console.log(buffer);
+        fs.writeFileSync(pathSaveFile,buffer,(err) => {
+            if(err) {
+                throw new responseError(500,err.message)
+                return
+            }
+        })
+        
+        const payload = {
+            destination_id : id,
+            image : fullPath
+        }
+
+        const data = await validate(addDestinationGalleryValidation,payload)
         datas.push(data)
     }
-
+    console.log(datas);
     return prismaClient.destination_gallery.createMany({
         data : datas
     })
@@ -196,5 +263,9 @@ export default {
     update,
     updateThumbnail,
     addFeatureCategories,
-    addFeature
+    addFeature,
+    addGallery,
+    deleteFeature,
+    updateFeature,
+    updateFeatureCategories
 }

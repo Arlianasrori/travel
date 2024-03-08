@@ -21,7 +21,7 @@ export const addDestinationAlamatValidation = joi.object({
     longtitude : joi.number().required() 
 })
 
-export const deleteDestinationValidation = joi.string().required()
+export const deleteDestinationValidation = joi.number().required()
 
 export const updateDestinationValidation = joi.object({
     id : joi.number().required(),
@@ -34,10 +34,10 @@ export const addFeatureCategoriesDestinationValidation = joi.object({
     detail : joi.string().max(1500).required(),
 })
 export const addFeatureDestinationValidation = joi.object({
-    destination_id : joi.number().max(255).required(),
+    destination_id : joi.number().required(),
     feature_id : joi.number().max(255).required(),
 })
-export const addDestinationGalerryValidation = joi.object({
+export const addDestinationGalleryValidation = joi.object({
   destination_id : joi.number().required(),
   image : joi.string().max(1500).required(),
 })

@@ -165,7 +165,8 @@ const login = async (body,user) => {
 
     const payload = {
         email : user.email,
-        name : user.email
+        name : user.name,
+        isAdmin : user.isAdmin
     }
     const acces_token = jwt.sign(payload,process.env.TOKEN_SECRET,{expiresIn : "2d"})
     const refresh_token = jwt.sign(payload,process.env.REFRESH_TOKEN_SECRET,{expiresIn : "60d"})
