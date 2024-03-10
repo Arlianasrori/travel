@@ -41,3 +41,4 @@ export const addDestinationGalleryValidation = joi.object({
   destination_id : joi.number().required(),
   image : joi.string().max(1500).required(),
 })
+export const deleteDestinationGalleryValidation = joi.number().required()

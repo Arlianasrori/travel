@@ -1,6 +1,6 @@
 import { prismaClient } from "../config/db.js";
 import { responseError } from "../error/responseError.js";
-import { addDestinationAlamatValidation, addDestinationGalleryValidation, addDestinationValidation, addFeatureCategoriesDestinationValidation, addFeatureDestinationValidation, deleteDestinationValidation, updateDestinationValidation } from "../validation/destinationValidation.js";
+import { addDestinationAlamatValidation, addDestinationGalleryValidation, addDestinationValidation, addFeatureCategoriesDestinationValidation, addFeatureDestinationValidation, deleteDestinationGalleryValidation, deleteDestinationValidation, updateDestinationValidation } from "../validation/destinationValidation.js";
 import { validate } from "../validation/validation.js";
 import Randomstring from "randomstring";
 import { file } from "../utils/imageSaveUtils.js";
@@ -220,8 +220,23 @@ const updateFeatureCategories = async (id,body) => {
         data : body
     })
 }
+const deleteFeatureCategories = async (id) => {
+    id = await validate(deleteDestinationGalleryValidation,id)
+    const findFeatureCategories = await prismaClient.feature.findUnique({
+        where : {
+            id : id
+        }
+    })
+    if(!findFeatureCategories) {
+        throw new responseError(404,"feature Categories is not found")
+    }
+    return prismaClient.destination_feature.delete({
+        where : {
+            id : id
+        }
+    })
+}
 const addGallery = async (body,id,url) => {
-    console.log(body.length);
     const findDestination = await prismaClient.destinations.findUnique({
         where : {
             id : id
@@ -236,7 +251,7 @@ const addGallery = async (body,id,url) => {
         const {pathSaveFile,fullPath} = await file(body[i],url)
         let dataBase64 = body[i].data.replace(/^data:image\/\w+;base64,/, "")
         let buffer = Buffer.from(dataBase64, 'base64');
-        console.log(buffer);
+     
         fs.writeFileSync(pathSaveFile,buffer,(err) => {
             if(err) {
                 throw new responseError(500,err.message)
@@ -252,9 +267,26 @@ const addGallery = async (body,id,url) => {
         const data = await validate(addDestinationGalleryValidation,payload)
         datas.push(data)
     }
-    console.log(datas);
+
     return prismaClient.destination_gallery.createMany({
         data : datas
+    })
+}
+const deleteGallery = async (id) => {
+    id = await validate(deleteDestinationGalleryValidation,id)
+    const findGallery = await prismaClient.destination_gallery.findUnique({
+        where : {
+            id : id
+        }
+    })
+    
+    if(!findGallery) {
+        throw new responseError(404,"destination galerry is not found")
+    }
+    return prismaClient.destination_gallery.delete({
+        where : {
+            id : id
+        }
     })
 }
 export default {
@@ -267,5 +299,7 @@ export default {
     addGallery,
     deleteFeature,
     updateFeature,
-    updateFeatureCategories
+    updateFeatureCategories,
+    deleteGallery,
+    deleteFeatureCategories
 }

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 import { prismaClient } from "../config/db.js";
 import { alamatValidation, loginValidation, registerValidation } from "../validation/authValidation.js";
 import fs from "fs"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import serviceUtils from "../utils/serviceUtils.js";
 import { sendOtpToUser } from "../utils/sendOtp.js"
 import { redisClient } from "../redis/redisClient.js";

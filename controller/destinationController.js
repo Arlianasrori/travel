@@ -132,12 +132,36 @@ export const updateCategories = async (req,res,next) => {
         next(error)
     }
 }
+export const deleteCategories = async (req,res,next) => {
+    try {
+        const id = parseInt(req.params.id)
+        const result = await destinationService.deleteFeatureCategories(id)
+        res.status(200).json({
+            msg : "succes",
+            data : result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
 export const addGallery = async (req,res,next) => {
     try {
         const body = req.body
         const id = parseInt(req.params.id)
         const url = `http://${req.hostname}:2008/public/images`
         const result = await destinationService.addGallery(body,id,url)
+        res.status(200).json({
+            msg : "succes",
+            data : result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+export const deleteGallery = async (req,res,next) => {
+    try {
+        const id = parseInt(req.params.id)
+        const result = await destinationService.deleteGallery(id)
         res.status(200).json({
             msg : "succes",
             data : result
