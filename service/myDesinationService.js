@@ -19,7 +19,6 @@ const myDestination = async (body) => {
     throw new responseError(404, "Destination is not found");
   }
 
-  console.log(body.id);
   const destination = await prismaClient.my_destination.findUnique({
     where: {
       id: body.id,

@@ -1,0 +1,14 @@
+[
+  {
+    "color": "red",
+    "type": "fox",
+    "size": "nano",
+    "name": "Ridok"
+  },
+  {
+    "color": "gray",
+    "type": "cockatiel",
+    "size": "nano",
+    "name": "Coco"
+  }
+]
