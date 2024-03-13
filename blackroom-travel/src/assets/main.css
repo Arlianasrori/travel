@@ -46,6 +46,44 @@ a img {
     border: none;
 }
 
+/* * {
+    user-select: none;
+} */
+
 .login-link{
     border: 1px solid white;
+}
+.login-dark{
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.box:hover .button-box{
+    background-color: #fff;
+    color: #5D92FF;
+    transition: all .3s;
+    
+}
+
+
+
+.box:hover .border-box{
+    border-color: white;
+    background-color: white;
+    transition: all .3s;
+}
+
+.box:hover{
+    cursor: pointer;
+}
+
+.aktif{
+    color: black;
+    font-weight: 300;
+}
+
+.kotak:hover {
+    color: white;
+    background-color: #4380FF;
+    transition: .2s;
+    cursor: pointer;
 }

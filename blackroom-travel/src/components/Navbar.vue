@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex mx-6 mt-5 justify-between">
+  <nav class=" sticky top-4 z-10 flex mx-6 mt-5 justify-between">
     <div>
       <router-link to="/" class="flex text-white ml-8 text-3xl"><strong>X</strong>plore.</router-link>
     </div>

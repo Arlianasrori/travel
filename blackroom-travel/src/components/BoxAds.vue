@@ -11,34 +11,34 @@
     </div>
     <div class="flex mt-24 gap-16 justify-center">
       <!-- box 1 -->
-      <div class="box w-72 h-86 bg-accent-color rounded-lg flex flex-col p-12">
+      <div class="box drop-shadow-xl w-72 h-86 bg-main-bg hover:bg-accent-color hover:text-white rounded-lg flex flex-col p-12">
         <div class="justify-center">
           <img
             src="../assets/travel_svgrepo.com.png"
-            class="p-2 block border-4 mx-auto rounded-full border-white bg-white"
+            class="p-2 block border-4 border-box mx-auto rounded-full border-secol bg-secol"
             alt=""
           />
         </div>
         <h3
-          class="block text-center text-3xl font-Poppins font-medium text-white mt-4"
+          class="block text-center text-3xl font-Poppins font-medium  mt-4"
         >
           Lorem
         </h3>
-        <p class="text-xs text-center mt-4 font-Poppins text-white">
+        <p class="text-xs text-center mt-4 font-Poppins ">
           Lorem ipsum dolor sit amet consecturas des inderas const
         </p>
         <button
-          class="bg-white w-fit mx-auto px-4 text-secol text-sm text-wrap border-8 inline-block border-white rounded-md mt-10"
+          class="bg-secol w-fit mx-auto px-6 py-3 text-white text-sm text-wrap inline-block rounded-md mt-10 button-box"
         >
           Try Now
         </button>
       </div>
       <!-- box 2 -->
-      <div class="box w-72 h-86 bg-main-bg rounded-lg flex flex-col p-12">
+      <div class="box drop-shadow-xl w-72 h-86 bg-main-bg hover:bg-accent-color hover:text-white rounded-lg flex flex-col p-12">
         <div class="justify-center">
           <img
             src="../assets/Group (1).png"
-            class="p-2 block border-4 mx-auto rounded-full border-secol bg-secol"
+            class="p-2 block border-4 border-box mx-auto rounded-full border-secol bg-secol"
             alt=""
           />
         </div>
@@ -49,17 +49,17 @@
           Lorem ipsum dolor sit amet consecturas des inderas const
         </p>
         <button
-          class="bg-secol w-fit mx-auto px-4 text-white text-sm text-wrap border-8 inline-block border-secol rounded-md mt-10"
+          class="bg-secol w-fit mx-auto px-6 py-3 text-white text-sm text-wrap inline-block rounded-md mt-10 button-box"
         >
           Try Now
         </button>
       </div>
       <!-- box 3 -->
-      <div class="box w-72 h-86 bg-main-bg rounded-lg flex flex-col p-12">
+      <div class="box drop-shadow-xl w-72 h-86 bg-main-bg hover:bg-accent-color hover:text-white rounded-lg flex flex-col p-12">
         <div class="justify-center">
           <img
             src="../assets/travel_svgrepo.com1.png"
-            class="p-2 block border-4 mx-auto rounded-full border-secol bg-secol"
+            class="p-2 block border-4 border-box mx-auto rounded-full border-secol bg-secol"
             alt=""
           />
         </div>
@@ -70,17 +70,17 @@
           Lorem ipsum dolor sit amet consecturas des inderas const
         </p>
         <button
-          class="bg-secol w-fit mx-auto px-4 text-white text-sm text-wrap border-8 inline-block border-secol rounded-md mt-10"
+          class="bg-secol w-fit mx-auto px-6 py-3 text-white text-sm text-wrap inline-block rounded-md mt-10 button-box"
         >
           Try Now
         </button>
       </div>
       <!-- box 4 -->
-      <div class="box w-72 h-86 bg-main-bg rounded-lg flex flex-col p-12">
+      <div class="box drop-shadow-xl w-72 h-86 bg-main-bg hover:bg-accent-color hover:text-white rounded-lg flex flex-col p-12">
         <div class="justify-center">
           <img
             src="../assets/travel_svgrepo.com2.png"
-            class="p-2 block border-4 mx-auto rounded-full border-secol bg-secol"
+            class="p-2 block border-4 border-box mx-auto rounded-full border-secol bg-secol"
             alt=""
           />
         </div>
@@ -91,7 +91,7 @@
           Lorem ipsum dolor sit amet consecturas des inderas const
         </p>
         <button
-          class="bg-secol w-fit mx-auto px-4 text-white text-sm text-wrap border-8 inline-block border-secol rounded-md mt-10"
+          class="bg-secol w-fit mx-auto px-6 py-3 text-white text-sm text-wrap inline-block rounded-md mt-10 button-box"
         >
           Try Now
         </button>
