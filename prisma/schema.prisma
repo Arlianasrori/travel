@@ -111,7 +111,7 @@ model destination_reviews {
   ratings Ratings
 
   user users @relation(fields: [review_by],references: [email])
-  destination destinations @relation(fields: [destination_id],references: [id])
+  destination destinations @relation(fields: [destination_id],references: [id]) 
   image destination_reviews_image[]
 }
 
@@ -120,7 +120,7 @@ model destination_reviews_image {
   destination_reviews_id Int
   image String @db.VarChar(1500)
 
-  destination_reviews destination_reviews @relation(fields: [destination_reviews_id],references: [id])
+  destination_reviews destination_reviews @relation(fields: [destination_reviews_id],references: [id],onDelete: Cascade)
 }
 
 model my_favorite {
