@@ -5,6 +5,7 @@ import { validate } from "../validation/validation.js";
 import Randomstring from "randomstring";
 import { file } from "../utils/imageSaveUtils.js";
 import fs from "fs"
+import axios from "axios"
 
 const add = async (body,alamat,image,url) => {
     const {pathSaveFile,fullPath} = await file(image,url)
@@ -21,22 +22,40 @@ const add = async (body,alamat,image,url) => {
 
     alamat = await validate(addDestinationAlamatValidation,alamat)
 
-    return image.mv(pathSaveFile,async (err) => {
+    await image.mv(pathSaveFile,async (err) => {
         if(err) {
             console.log(err);
             throw new responseError(500,err.message)
             return 
         }
-        return prismaClient.$transaction(async (tx) => {
-            const addDestination = await tx.destinations.create({
-                data : body
-            })
-            const addAlamat = await tx.alamat_destination.create({
-                data : alamat
-            })
-    
-            return {destination : addDestination,alamat : addAlamat}
+    })
+    return prismaClient.$transaction(async (tx) => {
+        const getWeather = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${alamat.latitude}&lon=${alamat.longtitude}&appid=${process.env.WEATHER_API_KEY}`)
+        .then(result => {
+            return result.data
+        }).catch(err => {
+            return err.response.data
         })
+      
+       if(getWeather.cod != 200) {
+        throw new responseError(getWeather.cod,getWeather.message)
+       }
+        const addDestination = await tx.destinations.create({
+            data : body
+        })
+        const addAlamat = await tx.alamat_destination.create({
+            data : alamat
+        })
+        const addWeather = await tx.weather.create({
+            data : {
+                destination_id : body.id,
+                main : getWeather.weather[0].main,
+                temp : getWeather.main.temp,
+                deksription : getWeather.weather[0].description
+            }
+        })
+
+        return {destination : addDestination,alamat : addAlamat,weather : addWeather}
     })
 }
 

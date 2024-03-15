@@ -140,9 +140,10 @@ model my_destination {
 // add delete
 
 model weather {
-  id Int @id
-  destination_id Int
-  detail String @db.VarChar(2500)
+  destination_id Int @id
+  main String @db.VarChar(255)
+  deksription String @db.VarChar(255)
+  temp Int 
 
   destination destinations @relation(fields: [destination_id],references: [id])
 }

@@ -29,7 +29,6 @@ app.use(fileUpload({
     fileSize: 50 * 1024 * 1024, 
    },
 }))
-app.use(fileUpload())
 app.use(express.static('public'))
 app.use('/user',authRouter)
 app.use('/user',userRouter)
