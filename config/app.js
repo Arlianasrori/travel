@@ -6,6 +6,8 @@ import { authRouter } from "../routes/authRouter.js"
 import env from "dotenv"
 import { userRouter } from "../routes/userRouter.js"
 import { destinationRouter } from "../routes/destinationRouter.js"
+import { favoritDestination } from "../routes/favoritDestinationRoute.js"
+import { myDestination } from "../routes/myDestinationRoute.js"
 
 export const app = express()
 
@@ -28,4 +30,6 @@ app.use(fileUpload({
 app.use('/user',authRouter)
 app.use('/user',userRouter)
 app.use('/destination',destinationRouter)
+app.use('/destination/destinationFavorite',favoritDestination)
+app.use('/destination/myDestination',myDestination)
 app.use(errorMiddleware)
